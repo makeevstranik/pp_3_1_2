@@ -7,13 +7,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.MyUserDetailsService;
 
 @Component
 @Qualifier("userValidator")
 public class UserValidator implements Validator {
-    private final UserDetailsService userDetailsService;
+    private final MyUserDetailsService userDetailsService;
     @Autowired
-    public UserValidator(UserDetailsService userDetailsService) {
+    public UserValidator(MyUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -27,7 +28,8 @@ public class UserValidator implements Validator {
         User targetUser = (User) target;
         System.out.println("------------>In validate(Object target, Errors errors): User: "
                 + targetUser.toString());
-
-
+        if (userDetailsService.isUserExistByEmail(targetUser.getEmail(), targetUser.getId())) {
+            errors.rejectValue("email", "01", "This email is taken");
+        }
     }
 }

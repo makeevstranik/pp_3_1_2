@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -35,9 +36,14 @@ public class MyUserDetailsService implements UserDetailsService {
                 new UsernameNotFoundException("user not found"));
     }
 
-    public Boolean isUserExistByEmail(User user) {
-        return userRepository.existsByEmail(user);
+    public Boolean isUserExistByEmail(String email, Long id) {
+        Optional<User> user =  userRepository.findUserByEmail(email);
+        if (id == null) return user.isPresent(); // for new user from form (id == null)
+        if (user.isEmpty()) return false;
+        return ! Objects.equals(user.get().getId(), id); // the same user must be validated
     }
+
+
     public List<User> getAllUsers() {
         return  userRepository.findAll();
     }

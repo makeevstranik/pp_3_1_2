@@ -71,7 +71,7 @@ public class AdminController {
         userValidator.validate(user, bindingResult);
         System.out.println("In @PostMapping(\"/create\"): bindingResult" + bindingResult.getAllErrors().toString());
         // in case bad validation:
-        if (bindingResult.hasErrors()) { return "/newUser"; }
+        if (bindingResult.hasErrors()) { return  "redirect:/admin/new"; }
         userDetailsService.registration(user);
         return "redirect:/admin/"; // go to /user
     }
@@ -80,7 +80,8 @@ public class AdminController {
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult); // inner validation
         if (bindingResult.hasErrors()) {
-            return "/edit";
+            //return "/edit";
+            return "redirect:/admin/showEdit/{id}";
         }
         userDetailsService.updateUser(user);
         return "redirect:/admin";
