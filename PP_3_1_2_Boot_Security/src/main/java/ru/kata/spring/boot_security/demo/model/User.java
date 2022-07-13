@@ -85,8 +85,8 @@ public class User implements UserDetails {
 
     public String getRolesString() {
         return roles.stream()
-                .map(Role::getName)
-                .collect(Collectors.joining("\n"));
+                .map(role -> role.getName().split("_")[1])
+                .collect(Collectors.joining(" "));
     }
 
     @Override
@@ -97,6 +97,7 @@ public class User implements UserDetails {
                 ", lastname='" + lastName + '\'' +
                 ", birth='" + birth + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 ", age=" + age +
                 '}';
     }

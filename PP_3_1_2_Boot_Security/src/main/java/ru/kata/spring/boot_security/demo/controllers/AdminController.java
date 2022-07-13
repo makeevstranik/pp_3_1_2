@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,6 +66,20 @@ public class AdminController {
             return "/edit";
         }
     }
+// ======= for bootstrap =======
+    @GetMapping("/bootstrap")
+    public String showBootstrapPage(Model model) {
+        System.out.println("+++++++++HERE+++++++++++++++++");
+        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("newUser", new User());
+        model.addAttribute("rolesList", roleService.getAllRoles());
+        model.addAttribute("authUser",  authUser);
+        model.addAttribute("users",  userDetailsService.getAllUsers());
+        return "/bootstrap-page";
+    }
+
+    // ======= END for bootstrap =======
+
 
     @PostMapping("/create")
     public String crateUserFromForm(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) { // get ready person from view
