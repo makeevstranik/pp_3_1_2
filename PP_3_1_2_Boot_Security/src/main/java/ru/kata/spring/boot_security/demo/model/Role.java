@@ -29,6 +29,10 @@ public class Role implements GrantedAuthority {
     @NotBlank
     private String name;
 
+    public String getShortName(){
+        return this.getName().split("_")[1];
+    }
+
     public Role(Roles enumRoles) {
         this.name = enumRoles.name();
     }

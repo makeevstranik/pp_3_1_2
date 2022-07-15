@@ -59,9 +59,9 @@
 
         <br>
         <div class="col-md-2 mb-3">
-            <label for="validationDefault04">Choose Role</label>
+            <label for="validationDefault09">Choose Role</label>
             <br>
-            <select id="validationDefault04" th:field="*{roles}" size="${roles.size()}}" multiple="multiple" required>
+            <select id="validationDefault09" th:field="*{roles}" size="${roles.size()}}" multiple="multiple" required>
                 <option th:each="role: ${rolesList}"
                         th:value="${{role}}"
                         th:text="${role.name}"

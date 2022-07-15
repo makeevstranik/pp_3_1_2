@@ -93,14 +93,19 @@ public class AdminController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        System.out.println("In PATCH user:" + user.toString());
+        System.out.println("In PATCH role:" + user.getRoles());
         userValidator.validate(user, bindingResult); // inner validation
         if (bindingResult.hasErrors()) {
             //return "/edit";
+            System.out.println("In Error--------> " +  bindingResult.getAllErrors());
             return "redirect:/admin/showEdit/{id}";
         }
+
         userDetailsService.updateUser(user);
         return "redirect:/admin";
     }
+
 
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable("id") Long id) {
