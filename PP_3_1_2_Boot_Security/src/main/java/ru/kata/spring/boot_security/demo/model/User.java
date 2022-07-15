@@ -53,7 +53,6 @@ public class User implements UserDetails {
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy") //automatically format string from form
-    @NotNull
     private Date birth;
 
     @Column(name = "password", length = 100)
