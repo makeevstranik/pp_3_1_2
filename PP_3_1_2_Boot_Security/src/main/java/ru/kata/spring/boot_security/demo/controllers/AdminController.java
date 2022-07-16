@@ -5,10 +5,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.MyUserDetailsService;
 import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.util.AdvanceInfo;
+import ru.kata.spring.boot_security.demo.util.BasicInfo;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
@@ -85,7 +88,7 @@ public class AdminController {
 
 
     @PostMapping("/create")
-    public String crateUserFromForm(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) { // get ready person from view
+    public String crateUserFromForm(@ModelAttribute("user") @Validated({BasicInfo.class, AdvanceInfo.class}) User user, BindingResult bindingResult) { // get ready person from view
         userValidator.validate(user, bindingResult);
         System.out.println("In @PostMapping(\"/create\"): bindingResult" + bindingResult.getAllErrors().toString());
         // in case bad validation:
@@ -95,7 +98,7 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String update(@ModelAttribute("user") @Validated(BasicInfo.class) User user, BindingResult bindingResult) {
         System.out.println("In PATCH user:" + user.toString());
         System.out.println("In PATCH role:" + user.getRoles());
         userValidator.validate(user, bindingResult); // inner validation

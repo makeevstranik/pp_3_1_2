@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.util.AdvanceInfo;
+import ru.kata.spring.boot_security.demo.util.BasicInfo;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -26,28 +28,28 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "name")
-    @NotNull
-    @NotBlank(message = "enter name")
-    @Size(min=4, max=30, message = "min4max30")
+    @NotNull(message = "enter name", groups = BasicInfo.class)
+    @NotBlank(message = "enter name", groups = BasicInfo.class)
+    @Size(min=4, max=30, message = "min4max30", groups = BasicInfo.class)
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull
-    @NotBlank(message = "enter lastname")
-    @Size(min=4, max=30, message = "min4max30")
+    @NotNull(message = "enter lastname", groups = BasicInfo.class)
+    @NotBlank(message = "enter lastname", groups = BasicInfo.class)
+    @Size(min=4, max=30, message = "min4max30", groups = BasicInfo.class)
     private String lastName;
 
     @Column(name="age")
-    @NotNull
-    @Min(value=0, message=">0")
-    @Max(value = 150, message = "<150")
-    @Digits(integer = 2, fraction = 0)
+    @NotNull(message = "enter age", groups = BasicInfo.class)
+    @Min(value=0, message=">0",  groups = BasicInfo.class)
+    @Max(value = 150, message = "<150",  groups = BasicInfo.class)
+    @Digits(integer = 2, fraction = 0,  groups = BasicInfo.class)
     private int age;
 
     @Column(name = "email", unique = true)
-    @NotNull
-    @NotBlank(message = "enter email")
-    @Email(message = "not valid email")
+    @NotNull(message = "enter email", groups = BasicInfo.class)
+    @NotBlank(message = "enter email", groups = BasicInfo.class)
+    @Email(message = "not valid email", groups = BasicInfo.class)
     private String email;
 
     @Column(name = "birth_date")
@@ -56,8 +58,8 @@ public class User implements UserDetails {
     private Date birth;
 
     @Column(name = "password", length = 100)
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "enter password", groups = AdvanceInfo.class)
+    @NotNull(message = "enter password", groups = AdvanceInfo.class)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

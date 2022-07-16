@@ -57,10 +57,20 @@ public class MyUserDetailsService implements UserDetailsService {
     }
     @Transactional
     public void updateUser(User user) {
-        if (userRepository.existsById(user.getId())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+        System.out.println("********************* IN updateUser(User user): *****************");
+        System.out.println(" user: " + user.toString());
+
+        Optional<User> userFromDB = userRepository.findUserById(user.getId());
+        if(userFromDB.isEmpty()) { return; }
+        if (user.getPassword().isEmpty()) { // password has NOT been changed in index.html
+            System.out.println("pass == empty");
+            user.setPassword(userFromDB.get().getPassword()); // old pass without encoding
+        } else { // password has been changed in index.html
+            System.out.println("pass != null");
+            user.setPassword(passwordEncoder.encode(user.getPassword())); // set new encoding pass
         }
+        userRepository.save(user);
+        System.out.println("********************* END updateUser(User user): *****************");
     }
     @Transactional
     public void deleteUserById(Long id) {
