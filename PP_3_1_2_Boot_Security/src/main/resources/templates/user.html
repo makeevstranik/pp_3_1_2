@@ -1,45 +1,112 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head> <meta charset="utf-8">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link rel="stylesheet" href="/indexCss.css"/>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
-    <title>User Page</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/indexCss.css"/>
+  <title>User page</title>
 </head>
 <body>
-<div class="container">
+<!-- navigation header -->
+<nav class="navbar navbar-dark bg-dark fixed-top"  >
+  <div class="text-white bg-dark">
+    <span class="font-weight-bold" th:text="${authUser.getEmail()}">#Bold text#</span>
+    <span th:text="'with roles: ' + ${authUser.getRolesString()}"> #with ----roles#</span>
+  </div>
+  <div>
+    <form th:action="@{/logout}" th:method="POST">
+      <button style="color: darkgrey" type="submit" class="btn btn-link btn-sm">Logout</button>
+    </form>
+  </div>
+</nav>
+<!-- END navigation header -->
 
-    <div class="row col-md-6 col-md-offset-2 custyle">
-        <h2> User </h2>
-        <form th:action="@{/logout}" th:method="POST">
-            <input type="submit" class="btn btn-primary btn-xs pull-right" value="Log Out"/>
-        </form>
-        <table class="table table-striped custab">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Last Name</th>
-                <th>Age</th>
-                <th>Email</th>
-                <th>Birth</th>
 
-            </tr>
-            </thead>
-            <tr>
-                <td th:text="${user.getId()}">id</td>
-                <td th:text="${user.getFirstName()}">name</td>
-                <td th:text="${user.getLastName()}">surname</td>
-                <td th:text="${user.getAge()}">25</td>
-                <td th:text="${user.getEmail()}">email</td>
-                <td th:text="${user.getBirth()}">birth</td>
+<div class="container-fluid bg-light p-0"> <!-- MAIN container -->
+  <br><br><br>
 
-            </tr>
 
-        </table>
-    </div>
-</div>
+  <div class="row no-gutters"> <!-- main grid 2-10 only one row for all screen -->
+
+
+    <div class="col-sm-2 bg-white min-vh-100"> <!-- left panel -->
+      <nav class="nav flex-column nav nav-pills nav-fill">
+        <div sec:authorize="hasAnyRole('ADMIN')">
+        <a class="nav-link" th:href="@{/admin}">Admin</a>
+        </div>
+        <a class="nav-link active" href="#">User</a>
+      </nav>
+    </div> <!-- END left panel -->
+
+    <div class="col-sm-10 bg-light"> <!-- right panel -->
+      <!--            Right main container-->
+      <div class="container">
+        <h1>User information-page</h1>
+
+        <!--                Tables -->
+        <div class="tab-content" id="users-tab-content">
+          <div class="tab-pane fade show active" id="users-table" role="tabpanel" aria-labelledby="users-table">
+            <div class="container">
+              <div class="row">
+                <div class="col border bg-light">
+                  <p ><h5>About user</h5>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <div class="row">
+                <div class="col border bg-white">
+                  <br>
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Age</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td th:text="${authUser.getId()}" >id</td>
+                      <td th:text="${authUser.getFirstName()}">#First Name#</td>
+                      <td th:text="${authUser.getLastName()}">#Last Name#</td>
+                      <td th:text="${authUser.getAge()}">#Age#</td>
+                      <td th:text="${authUser.getEmail()}">#Email#</td>
+                      <td th:text="${authUser.getRolesString()}">#Role#</td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+
+          <!--               End Tables -->
+        </div>
+
+        <!--            END Right main container-->
+      </div>
+
+    </div> <!-- END right panel -->
+
+
+  </div> <!-- END main grid 2-10 only one row for all screen -->
+</div> <!-- END MAIN container-->
+
+
+
+
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

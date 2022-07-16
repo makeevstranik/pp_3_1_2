@@ -27,12 +27,15 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping
-    public  String index(Model model) {
-        model.addAttribute("users", userDetailsService.getAllUsers());
-        //model.addAttribute("roles", roleService.getAllRoles());
-        return "index";
-    }
+//    @GetMapping
+//    public  String index(Model model) {
+//        model.addAttribute("users", userDetailsService.getAllUsers());
+//        //model.addAttribute("roles", roleService.getAllRoles());
+//        return "index";
+//    }
+
+//    @AuthenticationPrincipal UserDetails userDetails,
+//    Model model
 
     @GetMapping("/new")
     public String showNewUserForm(Model model) {
@@ -67,7 +70,7 @@ public class AdminController {
         }
     }
 // ======= for bootstrap =======
-    @GetMapping("/bootstrap")
+    @GetMapping
     public String showBootstrapPage(Model model) {
         System.out.println("+++++++++HERE+++++++++++++++++");
         User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -75,7 +78,7 @@ public class AdminController {
         model.addAttribute("rolesList", roleService.getAllRoles());
         model.addAttribute("authUser",  authUser);
         model.addAttribute("users",  userDetailsService.getAllUsers());
-        return "/bootstrap-page";
+        return "/index";
     }
 
     // ======= END for bootstrap =======
