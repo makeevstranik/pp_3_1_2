@@ -14,7 +14,6 @@ import ru.kata.spring.boot_security.demo.util.AdvanceInfo;
 import ru.kata.spring.boot_security.demo.util.BasicInfo;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
-import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -29,52 +28,42 @@ public class AdminController {
         this.userDetailsService = userDetailsService;
         this.roleService = roleService;
     }
-
-//    @GetMapping
-//    public  String index(Model model) {
-//        model.addAttribute("users", userDetailsService.getAllUsers());
-//        //model.addAttribute("roles", roleService.getAllRoles());
-//        return "index";
+//
+//    @GetMapping("/new")
+//    public String showNewUserForm(Model model) {
+//        model.addAttribute("user", new User());
+//        model.addAttribute("rolesList", roleService.getAllRoles());
+//        return "/newUser";
 //    }
-
-//    @AuthenticationPrincipal UserDetails userDetails,
-//    Model model
-
-    @GetMapping("/new")
-    public String showNewUserForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("rolesList", roleService.getAllRoles());
-        return "/newUser";
-    }
-
-    @GetMapping("/details/{id}")
-    public String showUserDetails(@PathVariable("id") Long id, Model model) {
-        Optional<User> user = userDetailsService.getUserById(id);
-
-        if (user.isEmpty()) {
-            model.addAttribute("id", id);
-            return "/index";
-        } else {
-            model.addAttribute("user", user.get());
-            return "/user-admin";
-        }
-    }
-
-    @GetMapping("/showEdit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model) {
-        Optional<User> user = userDetailsService.getUserById(id);
-        if (user.isEmpty()) {
-            model.addAttribute("id", id);
-            return "/index";
-        } else {
-            model.addAttribute("user", user.get());
-            model.addAttribute("rolesList", roleService.getAllRoles());
-            return "/edit";
-        }
-    }
+//
+//    @GetMapping("/details/{id}")
+//    public String showUserDetails(@PathVariable("id") Long id, Model model) {
+//        Optional<User> user = userDetailsService.getUserById(id);
+//
+//        if (user.isEmpty()) {
+//            model.addAttribute("id", id);
+//            return "/index";
+//        } else {
+//            model.addAttribute("user", user.get());
+//            return "/user-admin";
+//        }
+//    }
+//
+//    @GetMapping("/showEdit/{id}")
+//    public String showEditForm(@PathVariable("id") Long id, Model model) {
+//        Optional<User> user = userDetailsService.getUserById(id);
+//        if (user.isEmpty()) {
+//            model.addAttribute("id", id);
+//            return "/index";
+//        } else {
+//            model.addAttribute("user", user.get());
+//            model.addAttribute("rolesList", roleService.getAllRoles());
+//            return "/edit";
+//        }
+//    }
 // ======= for bootstrap =======
     @GetMapping
-    public String showBootstrapPage(Model model) {
+    public String indexAdmin(Model model) {
         System.out.println("+++++++++HERE+++++++++++++++++");
         User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("newUser", new User());
@@ -84,30 +73,32 @@ public class AdminController {
         return "/index";
     }
 
-    // ======= END for bootstrap =======
-
-
+    // validate new password - AdvanceInfo
     @PostMapping("/create")
-    public String crateUserFromForm(@ModelAttribute("user") @Validated({BasicInfo.class, AdvanceInfo.class}) User user, BindingResult bindingResult) { // get ready person from view
+    public String crateUserFromForm(@ModelAttribute("user") @Validated({BasicInfo.class, AdvanceInfo.class}) User user,
+                                    BindingResult bindingResult, Model model) { // get ready person from view
         userValidator.validate(user, bindingResult);
         System.out.println("In @PostMapping(\"/create\"): bindingResult" + bindingResult.getAllErrors().toString());
         // in case bad validation:
-        if (bindingResult.hasErrors()) { return  "redirect:/admin/new"; }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("err", bindingResult);
+            return  "/error-update";
+        }
         userDetailsService.registration(user);
-        return "redirect:/admin/"; // go to /user
+        return "redirect:/admin/";
     }
 
+    // dont validate password(encoded) in @Validated (empty if it was not changed) - BasicInfo
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Validated(BasicInfo.class) User user, BindingResult bindingResult) {
+    public String update(@ModelAttribute("user") @Validated(BasicInfo.class) User user,
+                         BindingResult bindingResult, Model model) {
         System.out.println("In PATCH user:" + user.toString());
         System.out.println("In PATCH role:" + user.getRoles());
         userValidator.validate(user, bindingResult); // inner validation
         if (bindingResult.hasErrors()) {
-            //return "/edit";
-            System.out.println("In Error--------> " +  bindingResult.getAllErrors());
-            return "redirect:/admin/showEdit/{id}";
+            model.addAttribute("err", bindingResult);
+            return  "/error-update";
         }
-
         userDetailsService.updateUser(user);
         return "redirect:/admin";
     }
@@ -118,6 +109,5 @@ public class AdminController {
         userDetailsService.deleteUserById(id);
         return "redirect:/admin";
     }
-
 
 }

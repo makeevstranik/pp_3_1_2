@@ -211,7 +211,7 @@
                                                                                 <label class="font-weight-bold" for="delrole">Role</label>
 
                                                                                 <select id="delrole" name="roles"  multiple class="form-control w-100"  size="2" th:readonly="true" >
-                                                                                    <option th:each="role: ${rolesList}"
+                                                                                    <option th:each="role: ${user.getRoles()}"
                                                                                             th:text="${role.getShortName()}">
                                                                                         <!--                                                                                     th:selected="${role.name.equals('ROLE_USER')}">-->
                                                                                     </option>

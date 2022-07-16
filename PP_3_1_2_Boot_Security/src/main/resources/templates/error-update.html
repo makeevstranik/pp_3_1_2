@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head> <meta charset="utf-8">
+
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link rel="stylesheet" href="/auth-style.css"/>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+  <title>Auth</title>
+</head>
+<body>
+<div class="container">
+  <h1>Error Update Or Create User</h1>
+  <small th:text="${err.getAllErrors()}" class="text-muted">Error list</small>
+</div>
+
+</body>
+</html>
