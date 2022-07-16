@@ -93,9 +93,6 @@
                                             <td th:text="${user.getRolesString()}">#Role#</td>
 
                                             <td>
-<!--                                                <a class='btn btn-info btn-xs' th:href="@{/admin/details/{id}(id=${user.getId()})}"><span class="glyphicon glyphicon-list"></span> Details</a>-->
-<!--                                                <a class='btn btn-info btn-sm' th:href="@{/admin/showEdit/{id}(id=${user.getId()})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>-->
-<!--                                                <a class='btn btn-info btn-sm'  data-toogle="modal" th:data-target="${'#exampleModal' + user.getId()}"><span class="glyphicon glyphicon-edit"></span> Edit</a>-->
 
                                                 <button type="button" class='btn btn-info btn-sm' data-toggle="modal" th:data-target="${'#editModal_'+ user.getId()}">
                                                     Edit
